@@ -10,7 +10,7 @@ import { gzip } from 'node:zlib';
 import { promisify } from 'node:util';
 import { openDatabase, transaction } from './server/db.js';
 import { accounts } from './server/accounts.js';
-import { initializeKeys, redeemKey, issueStudentRecovery, redeemStudentRecovery } from './server/access-keys.js';
+import { initializeKeys, initializeCreator, redeemKey, issueStudentRecovery, redeemStudentRecovery } from './server/access-keys.js';
 import { providerClient } from './server/providers.js';
 import { credentials } from './server/credentials.js';
 import { projects } from './server/projects.js';
@@ -97,6 +97,7 @@ export function createApp(options = {}) {
   }
   const db = options.db || openDatabase(options.database);
   initializeKeys(db);
+  initializeCreator(db);
   // Desativa as duas chaves privilegiadas publicadas em conversa anterior.
   db.prepare(`UPDATE access_keys SET revoked=?,reason=? WHERE id IN (?,?) AND used IS NULL AND revoked IS NULL`)
     .run(Date.now(), 'Rotação de chaves privilegiadas expostas',

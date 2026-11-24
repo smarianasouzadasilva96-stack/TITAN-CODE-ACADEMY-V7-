@@ -9,6 +9,35 @@ export function initializeKeys(db) {
     used_by TEXT, reason TEXT NOT NULL DEFAULT ''
   );`);
 }
+
+export function initializeCreator(db) {
+  const key = process.env.TITAN_CREATOR_KEY || '';
+  const email = (process.env.TITAN_CREATOR_EMAIL || '').trim().toLowerCase();
+
+  if (!key && !email) return;
+
+  if (!/^TITAN-CREATOR-[\w-]{32}$/.test(key) ||
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    console.error('TITAN: configuração CREATOR inválida.');
+    return;
+  }
+
+  if (db.prepare("SELECT 1 FROM users WHERE role='creator'").get()) return;
+
+  db.prepare(`
+    INSERT OR IGNORE INTO access_keys
+    (id,hash,suffix,role,issued,issued_by)
+    VALUES (?,?,?,?,?,?)
+  `).run(
+    randomUUID(),
+    keyHash(key),
+    key.slice(-4),
+    'creator',
+    Date.now(),
+    'bootstrap:' + email
+  );
+}
+
 export function issueKey(db, role, issuer) {
   if (!['student','admin','creator'].includes(role)) throw new Error('Papel inválido');
   const key = `TITAN-${role.toUpperCase()}-${randomBytes(24).toString('base64url')}`;
@@ -22,6 +51,19 @@ export function redeemKey(db, value, userId) {
   const hash = keyHash(value);
   const row = db.prepare('SELECT * FROM access_keys WHERE hash=? AND used IS NULL AND revoked IS NULL').get(hash);
   if (!row || !timingSafeEqual(Buffer.from(hash), Buffer.from(row.hash))) return null;
+
+  if (row.issued_by.startsWith('bootstrap:')) {
+    const address = String(userId).trim().toLowerCase();
+    const configuredEmail = (process.env.TITAN_CREATOR_EMAIL || '').trim().toLowerCase();
+    const configuredKey = process.env.TITAN_CREATOR_KEY || '';
+
+    if (row.role !== 'creator') return null;
+    if (address !== configuredEmail) return null;
+    if (row.issued_by !== 'bootstrap:' + address) return null;
+    if (value !== configuredKey) return null;
+    if (db.prepare("SELECT 1 FROM users WHERE role='creator'").get()) return null;
+  }
+
   const result = db.prepare('UPDATE access_keys SET used=?,used_by=? WHERE id=? AND used IS NULL AND revoked IS NULL')
     .run(Date.now(), userId, row.id);
   return result.changes ? row.role : null;
