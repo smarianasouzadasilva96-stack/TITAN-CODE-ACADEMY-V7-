@@ -426,5 +426,5 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   const files = [process.env.TITAN_TLS_CERT, process.env.TITAN_TLS_KEY];
   if (files.some(Boolean) && !files.every(Boolean)) throw new Error('Configure TITAN_TLS_CERT e TITAN_TLS_KEY em conjunto.');
   const tls = files.every(Boolean) ? { cert: await readFile(files[0]), key: await readFile(files[1]) } : null;
-  createApp({ tls }).listen(port, process.env.HOST || '127.0.0.1', () => console.log(`TITAN CODE ACADEMY na porta ${port}`));
+  createApp({ tls }).listen(port, process.env.HOST || (process.env.RENDER === 'true' ? '0.0.0.0' : '127.0.0.1'), () => console.log(`TITAN CODE ACADEMY na porta ${port}`));
 }
