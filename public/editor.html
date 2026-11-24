@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+  <meta name="theme-color" content="#100b10">
+  <meta name="description" content="Editor do TITAN CODE ACADEMY com projetos, prévia isolada e assistência da Titan AI.">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./tokens.css">
+  <link rel="stylesheet" href="./styles.css">
+  <title>Code Studio V6 | TITAN CODE</title>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="Navegação principal">
+      <div class="studio-menu-head"><strong>Code Studio</strong><button id="closeStudioMenu" class="small-icon" aria-label="Fechar menu">×</button></div>
+      <nav class="nav-menu" aria-label="Páginas do estúdio">
+        <a href="./#dashboard" class="nav-link">Início da academia</a>
+        <button class="nav-link active" data-page="studio">Estúdio</button>
+        <button class="nav-link" data-page="projects">Projetos locais e sincronizados</button>
+        <button class="nav-link" data-page="ai">Titan AI no editor</button>
+        <button class="nav-link" data-page="settings">Configurações do estúdio</button>
+        <button class="nav-link" data-page="diagnostics">Diagnóstico</button>
+      </nav>
+      <div class="sidebar-foot"><small id="footerConn">Modo local</small></div>
+    </aside>
+    <div class="main-area">
+      <header class="topbar">
+        <div class="studio-brand">
+          <button class="icon-button" id="menuToggle" aria-label="Abrir menu" aria-controls="sidebar" aria-expanded="false"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16 M4 12h16 M4 18h16"/></svg></button>
+          <strong id="breadcrumb">Estúdio</strong>
+        </div>
+        <div class="header-actions">
+          <span id="cloudStatus" class="connection-pill"><span class="status-dot"></span><span>Verificando…</span></span>
+          <button id="themeToggle" class="icon-button" title="Alternar tema" aria-label="Alternar tema"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z M12 2v2 M12 20v2 M2 12h2 M20 12h2 M5 5l1 1 M18 18l1 1 M5 19l1-1 M18 6l1-1"/></svg></button>
+          <button class="account-button" id="accountBtn" aria-label="Minha conta" title="Minha conta"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm-8 8v-1a5 5 0 0 1 5-5h6a5 5 0 0 1 5 5v1"/></svg></button>
+        </div>
+      </header>
+      <main id="studioMain"><a class="skip-studio" href="#codeEditor">Pular para o código</a>
+        <section id="studioPage" class="page active">
+          <div class="studio-heading">
+            <div class="project-identity">
+              <a href="./#projects" class="studio-crumb">Projetos</a>
+              <h1 id="projectHeading">Carregando projeto…</h1>
+            </div>
+            <div class="studio-summary"><span id="fileCount" class="studio-count">Arquivos</span><span id="saveStatus" class="save-label" role="status">Carregando</span></div>
+          </div>
+          <div class="studio-toolbar" aria-label="Ações do projeto">
+            <button id="toggleFiles" class="button button-outline mobile-files" aria-controls="filesPane" aria-expanded="false"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7V5h6l2 2h10v12H3z"/></svg> Arquivos</button>
+            <button id="newProjectTop" class="button button-outline"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14 M5 12h14"/></svg> Novo projeto</button>
+            <button id="togglePreview" class="button button-outline desktop-preview" aria-controls="previewPane" aria-expanded="true"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h18v16H3z M9 4v16"/></svg> Prévia</button>
+            <button id="exportBtn" class="button button-outline" aria-label="Exportar projeto"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4 M4 15v5h16v-5"/></svg> ZIP</button>
+            <button id="openAiBtn" class="button button-primary" aria-label="Abrir Titan AI"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z"/></svg> Titan AI</button>
+          </div>
+          <div class="mobile-workspace-tabs" aria-label="Modo do estúdio">
+            <button id="mobileEditorTab" class="selected" aria-controls="codePane" aria-pressed="true"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 6-6 6 6 6 M16 6l6 6-6 6 M14 3l-4 18"/></svg> Código</button>
+            <button id="mobilePreviewTab" aria-controls="previewPane" aria-pressed="false"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h18v16H3z M9 4v16"/></svg> Prévia</button>
+            <button id="mobileConsoleTab" aria-controls="consolePane" aria-pressed="false"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 5h18v14H3z M7 9l3 3-3 3m6 0h4"/></svg> Console</button>
+          </div>
+          <div class="workspace-layout" id="workspaceLayout">
+            <section class="files-pane" id="filesPane" aria-label="Explorador de arquivos">
+              <div class="pane-header"><strong>Explorador</strong><div class="studio-actions">
+                <button id="addFileBtn" class="small-icon" title="Novo arquivo" aria-label="Novo arquivo"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14 M5 12h14"/></svg></button>
+                <button id="closeFiles" class="small-icon mobile-files" aria-label="Fechar explorador">×</button>
+              </div></div>
+              <div class="explorer-project"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7V5h6l2 2h10v12H3z"/></svg><strong id="folderName"></strong></div>
+              <label class="project-search"><input id="projectSearch" type="search" placeholder="Buscar no projeto" aria-label="Buscar no projeto"></label>
+              <div class="file-list" id="fileList"></div>
+              <div class="files-foot">
+                <button id="templateBtn" class="text-button">Aplicar modelo</button>
+                <button id="importFilesBtn" class="text-button">Importar arquivos</button>
+              </div>
+            </section>
+            <section class="code-pane" id="codePane" aria-label="Código">
+              <div class="code-topbar">
+                <div class="code-tabs" id="codeTabs" aria-label="Arquivos abertos"></div>
+                <button id="addFileInlineBtn" class="small-icon" title="Novo arquivo na aba" aria-label="Novo arquivo na aba"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14 M5 12h14"/></svg></button>
+              </div>
+              <div class="editor-actions" aria-label="Ferramentas de edição">
+                <button id="undoBtn" class="mini-button" title="Desfazer (Ctrl+Z)">Desfazer</button>
+                <button id="redoBtn" class="mini-button" title="Refazer (Ctrl+Shift+Z)">Refazer</button>
+                <button id="findCodeBtn" class="mini-button" title="Buscar no código (Ctrl+F)" aria-label="Buscar no código">Buscar</button>
+                <button id="suggestCodeBtn" class="mini-button" title="Autocompletar (Ctrl+Espaço)">Completar</button>
+                <button id="formatCodeBtn" class="mini-button">Formatar</button>
+                <button id="copyCodeBtn" class="mini-button">Copiar</button>
+                <button id="renameFileBtn" class="mini-button" title="Renomear arquivo">Renomear</button>
+                <button id="removeFileBtn" class="mini-button" title="Excluir arquivo">Excluir</button>
+                <button id="versionsBtn" class="mini-button" title="Histórico de versões">Versões</button>
+                <button id="runCodeBtn" class="mini-button">Atualizar prévia</button>
+              </div>
+              <div class="find-bar" id="findBar" role="search" aria-label="Buscar no arquivo atual" hidden>
+                <label for="findInput">Buscar</label><input id="findInput" type="search" autocomplete="off" spellcheck="false" placeholder="Palavra ou trecho">
+                <input id="replacementInput" type="text" placeholder="Substituir por" aria-label="Substituir por">
+                <button id="replaceCodeBtn" type="button" aria-label="Substituir ocorrência selecionada">Trocar</button>
+                <span id="findCount" role="status" aria-live="polite">0 resultados</span>
+                <button id="findPrevBtn" type="button" aria-label="Ocorrência anterior">↑</button>
+                <button id="findNextBtn" type="button" aria-label="Próxima ocorrência">↓</button>
+                <button id="findCloseBtn" type="button" aria-label="Fechar busca">×</button>
+              </div>
+              <div class="editor-wrap">
+                <div class="line-numbers" id="lineNumbers" aria-hidden="true">1</div>
+                <div class="editor-surface"><pre id="syntaxView" class="syntax-layer" aria-hidden="true"></pre>
+                  <textarea id="codeEditor" aria-label="Editor de código" aria-description="Tab indenta. Pressione Escape e depois Tab para sair do editor." spellcheck="false" autocapitalize="off" autocomplete="off" autocorrect="off" wrap="off"></textarea></div>
+              </div>
+              <div id="suggestions" class="editor-suggestions" aria-label="Sugestões de código" hidden></div>
+              <div class="code-status"><span id="languageName"></span><span id="lineCount"></span><span id="cursorPos"></span><span id="editorStatus" role="status">Pronto</span></div>
+            </section>
+            <div id="previewResize" class="preview-resize" role="separator" tabindex="0" aria-orientation="vertical" aria-label="Largura da prévia" aria-valuemin="24" aria-valuemax="48" aria-valuenow="32" aria-controls="previewPane"></div>
+            <section class="preview-pane" id="previewPane" aria-label="Prévia isolada">
+              <div class="pane-header"><div><strong>Prévia</strong> <small id="previewMeta"></small></div><div class="studio-actions">
+                <button class="small-icon" id="refreshPreviewBtn" title="Atualizar prévia" aria-label="Atualizar prévia"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 7v5h-5 M20 12a8 8 0 1 0-2 5"/></svg></button>
+                <button class="small-icon" id="expandPreviewBtn" title="Alternar tela cheia" aria-label="Prévia em tela cheia" aria-pressed="false"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 4H4v5 M15 4h5v5 M4 15v5h5 M20 15v5h-5"/></svg></button>
+              </div></div>
+              <div class="frame-shell"><iframe id="previewFrame" sandbox="allow-scripts" title="Visualização isolada do projeto" referrerpolicy="no-referrer"></iframe>
+                <div id="previewEmpty" class="preview-empty" hidden><h3>Prévia indisponível</h3><p>Adicione um arquivo HTML, CSS ou JavaScript ao projeto para visualizar o resultado.</p></div>
+              </div>
+            </section>
+          </div>
+          <details class="preview-console" id="consolePane">
+            <summary>Console</summary>
+            <div class="studio-actions"><button id="sandboxRun" class="mini-button" hidden>Executar no sandbox</button>
+              <button id="explainConsole" class="mini-button">Explicar com Titan AI</button><button id="clearConsole" class="mini-button">Limpar</button></div>
+            <pre id="previewConsole" aria-live="polite"></pre>
+          </details>
+        </section>
+        <section id="projectsPage" class="page"><div class="subpage-head"><div><h1>Meus <span>projetos.</span></h1><p>Abra, revise e exporte seus projetos.</p></div><button class="button button-primary" data-action="new-project">+ Novo projeto</button></div><div class="project-grid" id="projectsGrid"></div></section>
+        <section id="aiPage" class="page"><div class="subpage-head"><div><h1>Conheça o <span>Titan AI.</span></h1><p>Um copiloto para desenvolver, explicar e reparar seus códigos.</p></div><button id="openChatFull" class="button button-primary">✦ Abrir conversa</button></div><div class="feature-grid"><div class="feature-card"><span>✎</span><h3>Gerar código</h3><p>Descreva a função ou interface que deseja e receba uma implementação sugerida.</p></div><div class="feature-card"><span>◈</span><h3>Encontrar bugs</h3><p>Analise o arquivo atual com o contexto do projeto.</p></div><div class="feature-card"><span>⌁</span><h3>Explicar funções</h3><p>Entenda algoritmos e APIs em linguagem simples.</p></div></div><div class="setup-banner" id="aiSetupBanner">Gerencie seu provedor na tela Minha Inteligência Artificial. O editor também funciona em modo local.</div></section>
+        <section id="diagnosticsPage" class="page"><div class="subpage-head"><div><h1>Centro de <span>diagnóstico.</span></h1><p>Verificações de conexão, armazenamento, servidor e configuração.</p></div><button class="button button-primary" id="runDiagnostics">↻ Executar testes</button></div><div id="diagnosticList" class="diagnostic-list"></div></section>
+        <section id="settingsPage" class="page"><div class="subpage-head"><div><h1>Configurações <span>do estúdio.</span></h1><p>Escolha como seu TITAN CODE deve trabalhar.</p></div></div><div class="settings-card"><div><strong>Aparência</strong><p>Alternar entre temas escuro e claro.</p></div><button id="themeSettingsBtn" class="button button-outline">Alternar tema</button></div><div class="settings-card"><div><strong>Prévia automática</strong><p>Atualizar HTML, CSS e JS após digitar.</p></div><label class="toggle"><input type="checkbox" id="autoPreviewCheck" checked><span></span></label></div><div class="settings-card"><div><strong>IA no servidor</strong><p id="settingsAiState">Consultando...</p></div><button id="refreshAiStatus" class="button button-outline">Reverificar</button></div><div class="settings-card"><div><strong>Projetos neste dispositivo</strong><p>Faça backup antes de limpar os dados do navegador.</p></div><button id="backupAllBtn" class="button button-outline">Exportar backup</button><button id="restoreBackupBtn" class="button button-outline">Importar backup</button><button id="importLegacyBtn" type="button" class="button button-outline" hidden>Importar projetos locais</button></div><div class="settings-card"><div><strong>Conta de acesso</strong><p id="authStateText">Verificando sessão...</p></div><button id="loginSettingsBtn" class="button button-outline">Entrar</button></div></section>
+      </main>
+    </div>
+  </div>
+  <aside class="ai-drawer" id="aiDrawer" aria-label="Titan AI" aria-hidden="true"><div class="ai-header"><div class="ai-avatar">✦</div><div><strong>TITAN AI</strong><small id="aiHeadStatus">Copiloto de programação</small></div><button class="small-icon close-ai" id="closeAiBtn" aria-label="Fechar Titan AI">×</button></div><div class="quick-prompts"><button data-prompt="Explique este código e sugira melhorias.">✧ Explicar</button><button data-prompt="Encontre bugs neste código e sugira correções.">◈ Corrigir</button><button data-prompt="Refatore este código para ficar mais legível.">⌁ Refatorar</button><button data-prompt="Proponha um projeto multiarquivo. Entregue um bloco JSON com files, uma lista de objetos path e content.">Criar arquivos</button></div><div id="chatMessages" class="chat-messages"><div class="chat-welcome"><div class="chat-emblem">✦</div><h3>Olá, desenvolvedor.</h3><p>Sou o Titan AI. Posso ajudar a criar componentes, solucionar bugs e evoluir seus projetos.</p></div></div><div class="chat-bottom"><div class="chat-context"><span class="tiny-good">●</span> Contexto: <strong id="chatFileName">index.html</strong></div><div class="chat-input-wrap"><textarea id="chatInput" aria-label="Mensagem para Titan AI" rows="2" placeholder="Peça um código, correção ou explicação..."></textarea><button id="sendChatBtn" aria-label="Enviar mensagem">➤</button></div><a id="editorChatLink" href="./#chat" hidden>Abrir no histórico da Titan AI</a><small>Revise sugestões antes de aplicá-las.</small></div></aside>
+  <div class="backdrop" id="backdrop" hidden></div><dialog id="versionsDialog" class="modal"><div class="modal-heading"><h2>Histórico de versões</h2><button id="versionsClose" class="small-icon" aria-label="Fechar versões">×</button></div><div id="versionList"></div><pre id="versionDiff"></pre></dialog>
+  <dialog id="genericDialog" class="modal"><form method="dialog" id="dialogForm"><div class="modal-heading"><span class="modal-symbol" id="dialogIcon">✦</span><button type="button" id="dialogClose" class="small-icon" aria-label="Fechar diálogo">×</button></div><h2 id="dialogTitle">Novo projeto</h2><p id="dialogDescription"></p><label id="dialogLabel" for="dialogInput">Nome</label><input id="dialogInput" type="text" maxlength="80" required><div class="modal-actions"><button type="button" id="dialogCancel" class="button button-outline">Cancelar</button><button type="submit" id="dialogSubmit" class="button button-primary">Criar</button></div></form></dialog>
+  <dialog id="templateDialog" class="modal template-modal"><div class="modal-heading"><span class="modal-symbol">✧</span><button id="templateClose" class="small-icon" aria-label="Fechar modelos">×</button></div><h2>Comece com um modelo</h2><p>Escolha uma base para seu projeto. Substituirá os arquivos do projeto atual.</p><div class="template-options"><button data-template="web"><b>◫</b><span><strong>Site moderno</strong><small>HTML + CSS + JavaScript</small></span>↗</button><button data-template="landing"><b>✦</b><span><strong>Landing page</strong><small>Design responsivo</small></span>↗</button><button data-template="luau"><b>⌘</b><span><strong>Luau / Roblox Studio</strong><small>Script de exemplo</small></span>↗</button><button data-template="python"><b>⌁</b><span><strong>Python</strong><small>Programa inicial</small></span>↗</button></div></dialog>
+  <div id="toastStack" class="toast-stack" aria-live="polite"></div>
+  <input type="file" id="restoreBackupInput" accept=".json,application/json" hidden aria-label="Selecionar backup JSON do TITAN CODE">
+  <input type="file" id="importFilesInput" multiple hidden accept=".html,.css,.js,.ts,.json,.py,.lua,.luau,.txt,.md,.sql,.java,.kt,.cpp,.c,.cs,.sh,.php,.go,.rs,.xml,.svg">
+  <script src="./app.js" defer></script>
+</body>
+</html>

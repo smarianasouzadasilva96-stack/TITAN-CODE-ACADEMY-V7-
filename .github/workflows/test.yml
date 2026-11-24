@@ -1,0 +1,45 @@
+name: TITAN CODE ACADEMY CI
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: ['20', '24']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+      - if: matrix.node == '20'
+        run: npm ci --include=optional
+      - if: matrix.node == '24'
+        run: npm ci --omit=optional
+      - run: npm run build
+      - name: Unit and API integration tests
+        run: |
+          mkdir -p artifacts
+          set -o pipefail
+          npm test | tee artifacts/api.log
+      - if: matrix.node == '24'
+        run: npx playwright install --with-deps chromium
+      - if: matrix.node == '24'
+        name: Browser tests
+        run: |
+          set -o pipefail
+          npm run test:browser | tee artifacts/browser.log
+        env:
+          TITAN_SCREENSHOT_DIR: artifacts
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: titan-ci-node-${{ matrix.node }}
+          path: artifacts/
+          if-no-files-found: ignore

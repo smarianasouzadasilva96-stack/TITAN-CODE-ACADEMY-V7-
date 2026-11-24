@@ -1,0 +1,29 @@
+{
+  "name": "tutan-ai",
+  "version": "6.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20.6"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test",
+    "test:browser": "node --test tests/browser.e2e.mjs",
+    "build": "node scripts/check.mjs",
+    "backup": "node scripts/maintenance.mjs backup",
+    "rotate-key": "node scripts/maintenance.mjs rotate-key",
+    "admin": "node scripts/maintenance.mjs admin"
+  },
+  "dependencies": {
+    "ipaddr.js": "2.2.0"
+  },
+  "optionalDependencies": {
+    "better-sqlite3": "11.10.0"
+  },
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "playwright": "1.65.1"
+  }
+}

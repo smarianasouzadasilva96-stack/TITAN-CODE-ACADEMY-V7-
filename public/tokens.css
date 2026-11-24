@@ -1,0 +1,57 @@
+:root {
+  color-scheme: dark;
+  --bg: #100b10;
+  --accent: #ed3657;
+  --purple: #a52d51;
+  --surface: #1d151c;
+  --surface-up: #291c25;
+  --text: #fff5f7;
+  --muted: #c5aeb9;
+  --green: #37d6a0;
+  --danger: #ff647c;
+  --rail: #150e15;
+  --border: #50303f;
+  --radius: .95rem;
+  --speed: 190ms;
+  --mono: 'Cascadia Code', 'SFMono-Regular', Consolas, monospace;
+  --sans: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  font-family: var(--sans);
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+  --bg: #edf3fc;
+  --rail: #f9fbff;
+  --surface: #fff;
+  --surface-up: #e4edf9;
+  --text: #101c35;
+  --muted: #435676;
+  --green: #0a694e;
+  --danger: #a61b3a;
+  --border: #c5d3e9;
+}
+
+:root[data-theme='amoled'] {
+  --bg: #000;
+  --rail: #05070b;
+  --surface: #090c13;
+  --surface-up: #111722;
+  --border: #38212d;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; color: var(--text); background: var(--bg); }
+button, input, select, textarea { font: inherit; }
+button, a, input, select, textarea { touch-action: manipulation; }
+button { cursor: pointer; }
+button:disabled { opacity: .6; cursor: default; }
+a { color: inherit; }
+[hidden] { display: none !important; }
+:focus-visible { outline: 2px solid var(--focus,var(--accent)); outline-offset: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+}
+:root[data-motion='off'] *, :root[data-motion='off'] *::before, :root[data-motion='off'] *::after {
+  animation: none !important; transition: none !important; scroll-behavior: auto !important;
+}

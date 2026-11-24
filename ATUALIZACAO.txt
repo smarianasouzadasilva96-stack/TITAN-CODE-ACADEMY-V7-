@@ -1,0 +1,2 @@
+Base azul V6, catálogo V7 integrado: 48 cursos, 7232 registros (7200 importados e 32 originais). O catálogo V7 inclui oficinas geradas a partir de aulas editoriais, não 7200 temas independentes.
+Pare o servidor com Ctrl+C. Extraia o ZIP em pasta separada. Execute scripts/update-termux.sh apontando para a instalação azul V5 ou V6. O script faz backup do SQLite e mantém .env e dados. Reinicie na mesma porta. Não use a pasta do site antigo.
